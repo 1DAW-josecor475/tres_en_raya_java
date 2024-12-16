@@ -21,7 +21,7 @@ public class Main {
         - char board[][]: para comprobar las casillas del tablero.
         - int movement: para comprobar que se introduce un número que tenga una casilla asignada.
 
-        Devuelve "true" si el movimiento es válido.
+        Devuelve "false" si se se ha hecho un movimiento en una casilla que ya tiene una ficha o si se introduce un número que no tiene una casilla asignada.
          */
         switch (movement) {
             case 1: return board[0][0] == '-';
@@ -38,7 +38,7 @@ public class Main {
         if (movement > 0 || movement < 10) {
             return true;
         }
-        
+
         return false;
     }
 }
