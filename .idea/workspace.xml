@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8578d9d4-c6c4-44e6-a166-3f528215c935" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Tres_En_Raya.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/TODO.md" beforeDir="false" afterPath="$PROJECT_DIR$/src/TODO.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Tres_En_Raya.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Tres_En_Raya.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,6 +40,7 @@
     "Application.Main.executor": "Run",
     "Application.Tres_En_Raya.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "feat/game-turns",
     "kotlin-language-version-configured": "true"
   }

@@ -8,10 +8,17 @@ public class Tres_En_Raya {
                 board[i][j] = '-';
             }
         }
-            System.out.println("****  BIENVENIDO A LA GRIETA DEL TRES EN RAYA ****");
+            welcomeMessage();
             printBoard(board);
             gameLoop(board);
         }
+    public static void welcomeMessage() {
+        System.out.println("""
+                               *********************************************
+                               *      TRES  EN  RAYA:  EL  VIDEOJUEGO      *
+                               *********************************************
+                               """);
+    }
     public static void gameLoop(char[][] board) {
         /*
         * Función que maneja todo el bucle del juego.
@@ -25,9 +32,10 @@ public class Tres_En_Raya {
         Scanner sc = new Scanner(System.in);
         boolean hasEnded = false;
         int turns = 0;
-        // Jugabilidad en cada turno de juego
+
+        // Jugabilidad hasta que el juego termine
         while(!hasEnded) {
-            int movement;
+            int move;
 
             // Turno del usuario
             do {
@@ -37,15 +45,15 @@ public class Tres_En_Raya {
                                    4. CENTRO IZQUIERDA  5. CENTRO CENTRO    6. CENTRO CERECHA
                                    7. ABAJO IZQUIERDA   8. ABAJO CENTRO     9. ABAJO DERECHA
                                    """);
-                movement = sc.nextInt();
-                if (!validMovement(board, movement)) {
+                move = sc.nextInt();
+                if (!validMove(board, move)) {
                     System.out.println("** MOVIMIENTO INVÁLIDO");
                     printBoard(board);
                 } else {
                     System.out.println("** MOVIMIENTO VÁLIDO");
                 }
-            } while(!validMovement(board, movement));
-            updateBoard(movement, user, board);
+            } while(!validMove(board, move));
+            updateBoard(move, user, board);
 
             printBoard(board);
 
@@ -54,12 +62,12 @@ public class Tres_En_Raya {
                 System.out.println("** Enhorabuena, has ganado.");
                 hasEnded = true;
             } else {
-                System.out.println("* Turno de la máquina.");
                 // Turno del ordenador
+                System.out.println("* Turno de la máquina.");
                 do {
-                    movement = (int) (Math.random() * 9 + 1);
-                } while(!validMovement(board, movement));
-                updateBoard(movement, computer, board);
+                    move = (int) (Math.random() * 9 + 1);
+                } while(!validMove(board, move));
+                updateBoard(move, computer, board);
 
                 printBoard(board);
 
@@ -92,17 +100,17 @@ public class Tres_En_Raya {
             System.out.println();
         }
     }
-    public static boolean validMovement (char[][] board, int movement){
-        /* Función: comprueba si el movimiento que hizo el jugador es válido.
+    public static boolean validMove (char[][] board, int move){
+        /* Función que comprueba si el movimiento que hizo el jugador es válido.
 
         * Args:
         * - char[][] board: para comprobar las casillas del tablero.
-        * - int movement: para comprobar que se introduce un número que tenga una casilla asignada.
+        * - int move: para comprobar que se introduce un número que tenga una casilla asignada.
 
         * Returns:
         * "false" si se se ha hecho un movimiento en una casilla que ya tiene una ficha o si se introduce un número que no tiene una casilla asignada.
         */
-        return switch (movement) {
+        return switch (move) {
             case 1 -> board[0][0] == '-';
             case 2 -> board[0][1] == '-';
             case 3 -> board[0][2] == '-';
@@ -116,18 +124,18 @@ public class Tres_En_Raya {
         };
 
     }
-    public static void updateBoard(int movement, char player, char[][] board) {
+    public static void updateBoard(int move, char player, char[][] board) {
         /*
          * Esta función se encarga de asignar el caracter del player/ordenador a una posición del tablero.
 
          * Args:
 
-         * int movement: Un entero que es la posición de colocación de la pieza del player.
+         * int move: Un entero que es la posición de colocación de la pieza del player.
          * char player: El caracter del jugador en dicha actualización ('X' para usuario / 'O' para el ordenador).
          * char[][] board: Matriz que representa el tablero de juego.
 
          */
-        switch (movement) {
+        switch (move) {
             case 1: board[0][0] = player; break;
             case 2: board[0][1] = player; break;
             case 3: board[0][2] = player; break;
