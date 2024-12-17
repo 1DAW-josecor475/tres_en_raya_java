@@ -21,15 +21,15 @@ public class Tres_En_Raya {
 
         do {
             char[][] board = generateBoard();
-            System.out.println("Nueva partida: \n");
-            printBoard(board);
+            System.out.println("Nueva partida: ");
 
             String difficulty = chooseDifficulty(sc);
-            boolean userWon = gameLoop(board, difficulty, sc);
+            printBoard(board);
+            String userWon = gameLoop(board, difficulty, sc);
 
-            if (userWon) {
+            if (userWon.equalsIgnoreCase("user")) {
                 userWins++;
-            } else {
+            } else if (userWon.equalsIgnoreCase("computer")) {
                 computerWins++;
             }
 
@@ -56,11 +56,12 @@ public class Tres_En_Raya {
         return board;
     }
 
-    public static boolean gameLoop(char[][] board, String difficulty, Scanner sc) {
+    public static String gameLoop(char[][] board, String difficulty, Scanner sc) {
         char user = 'X';
         char computer = 'O';
         boolean hasEnded = false;
         int turns = 0;
+        String winner = "";
 
         while (!hasEnded) {
             int movement;
@@ -85,42 +86,41 @@ public class Tres_En_Raya {
 
             if (checkWinner(board, user)) {
                 System.out.println("** Resultado de la partida: VICTORIA.");
-                return true;
-            }
-
-            if (++turns == 9) {
+                hasEnded = true;
+                winner = "user";
+                return winner;
+            } else if (++turns == 9) {  // Check after 9 turns for draw
                 System.out.println("** Resultado de la partida: EMPATE.");
-                return false;
-            }
+                hasEnded = true;
+                winner = "draw";
+                return winner;
+            } else {
+                // Turno del ordenador
+                System.out.println("* Turno del ordenador...");
+                do {
+                    movement = switch (difficulty) {
+                        case "dificil" -> getBlockingMove(board, computer, user);
+                        case "medio" -> getBestMove(board, computer, user);
+                        default -> getRandomMove(board);
+                    };
+                } while (!validMovement(board, movement));
 
-            // Turno del ordenador
-            System.out.println("* Turno del ordenador...");
-            do {
-                movement = switch (difficulty) {
-                    case "dificil" -> getBestMove(board, computer, user);
-                    case "medio" -> getBlockingMove(board, computer, user);
-                    default -> getRandomMove(board);
-                };
-            } while (!validMovement(board, movement));
+                updateBoard(movement, computer, board);
+                printBoard(board);
 
-            updateBoard(movement, computer, board);
-            printBoard(board);
-
-            if (checkWinner(board, computer)) {
-                System.out.println("** Resultado de la partida: DERROTA.");
-                return false;
+                if (checkWinner(board, computer)) {
+                    System.out.println("** Resultado de la partida: DERROTA.");
+                    hasEnded = true;
+                    winner = "computer";
+                    return winner;
+                }
             }
         }
 
-        return false;
+        return winner;
     }
-    public static void printBoard(char[][] board) {
-        /*
-        * Función encargada de mostrar por pantalla el tablero, en su estado actual.
 
-        * Args:
-        * char[][] board: El tablero actual de la partida.
-        */
+    public static void printBoard(char[][] board) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 System.out.print(board[i][j] + "      ");
@@ -128,9 +128,9 @@ public class Tres_En_Raya {
             System.out.println();
         }
     }
-    
+
     public static String chooseDifficulty(Scanner sc) {
-      
+
         System.out.println("\nSeleccione la dificultad:");
         System.out.println("1. Fácil");
         System.out.println("2. Medio");
@@ -150,12 +150,11 @@ public class Tres_En_Raya {
     }
 
     public static int getRandomMove(char[][] board) {
-      
+
         return (int) (Math.random() * 9 + 1);
     }
 
     public static int getBestMove(char[][] board, char computer, char user) {
-      
         // Verifica si puede ganar en el siguiente movimiento
         for (int i = 1; i <= 9; i++) {
             if (validMovement(board, i)) {
@@ -167,15 +166,14 @@ public class Tres_En_Raya {
                 undoMovement(i, board);
             }
         }
-        // Bloquea al jugador si está a punto de ganar
-        getBlockingMove(board, computer, user);
+
 
         // Si no hay ningún movimiento ganador, elige uno al azar
         return getRandomMove(board);
     }
 
     public static int getBlockingMove(char[][] board, char computer, char user) {
-        
+
         // Bloquea al jugador si está a punto de ganar
         for (int i = 1; i <= 9; i++) {
             if (validMovement(board, i)) {
@@ -188,12 +186,19 @@ public class Tres_En_Raya {
             }
         }
 
+        // Si no, busca el mejor movimiento
+        int bestMove = getBestMove(board, computer, user);
+        if (bestMove != 0) {
+            return bestMove;
+        }
+
+
         // Si no hay peligro, mueve aleatoriamente
         return getRandomMove(board);
     }
 
     public static void undoMovement(int movement, char[][] board) {
-    
+
         switch (movement) {
             case 1 -> board[0][0] = '-';
             case 2 -> board[0][1] = '-';
@@ -208,15 +213,6 @@ public class Tres_En_Raya {
     }
 
     public static boolean validMovement(char[][] board, int movement) {
-        /* Función que comprueba si el movimiento que hizo el jugador es válido.
-
-        * Args:
-        * - char[][] board: para comprobar las casillas del tablero.
-        * - int movement: para comprobar que se introduce un número que tenga una casilla asignada.
-
-        * Returns:
-        * "false" si se se ha hecho un movimiento en una casilla que ya tiene una ficha o si se introduce un número que no tiene una casilla asignada.
-        */
         return switch (movement) {
             case 1 -> board[0][0] == '-';
             case 2 -> board[0][1] == '-';
@@ -232,16 +228,6 @@ public class Tres_En_Raya {
     }
 
     public static void updateBoard(int movement, char player, char[][] board) {
-         /*
-         * Esta función se encarga de asignar el caracter del player/ordenador a una posición del tablero.
-
-         * Args:
-
-         * int movement: Un entero que es la posición de colocación de la pieza del player.
-         * char player: El caracter del jugador en dicha actualización ('X' para usuario / 'O' para el ordenador).
-         * char[][] board: Matriz que representa el tablero de juego.
-
-         */
         switch (movement) {
             case 1 -> board[0][0] = player;
             case 2 -> board[0][1] = player;
@@ -256,21 +242,13 @@ public class Tres_En_Raya {
     }
 
     public static boolean checkWinner(char[][] board, char player) {
-         /*
-         * Función que se encarga de comprobar los índices del tablero para determinar si hay un ganador
-
-         * Args:
-         * char[][] board: Matriz que representa el tablero de juego.
-         * char player: El caracter del jugador para comprobar las combinaciones.
-
-         */
         return (board[0][0] == player && board[0][1] == player && board[0][2] == player) ||
-               (board[1][0] == player && board[1][1] == player && board[1][2] == player) ||
-               (board[2][0] == player && board[2][1] == player && board[2][2] == player) ||
-               (board[0][0] == player && board[1][0] == player && board[2][0] == player) ||
-               (board[0][1] == player && board[1][1] == player && board[2][1] == player) ||
-               (board[0][2] == player && board[1][2] == player && board[2][2] == player) ||
-               (board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
-               (board[0][2] == player && board[1][1] == player && board[2][0] == player);
+                (board[1][0] == player && board[1][1] == player && board[1][2] == player) ||
+                (board[2][0] == player && board[2][1] == player && board[2][2] == player) ||
+                (board[0][0] == player && board[1][0] == player && board[2][0] == player) ||
+                (board[0][1] == player && board[1][1] == player && board[2][1] == player) ||
+                (board[0][2] == player && board[1][2] == player && board[2][2] == player) ||
+                (board[0][0] == player && board[1][1] == player && board[2][2] == player) ||
+                (board[0][2] == player && board[1][1] == player && board[2][0] == player);
     }
 }

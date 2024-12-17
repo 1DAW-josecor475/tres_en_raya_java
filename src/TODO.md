@@ -1,13 +1,13 @@
 # GENERAL
 
 ## HIGH PRIORITY:
-- [ ] Implementar al mejor de 3 partidas.
-- [ ] Comprobar si se puede reducir la redundancia.
-- [ ] Modular la pregeneración del tablero.
+- [x] Implementar al mejor de 3 partidas.
+- [x] Comprobar si se puede reducir la redundancia.
+- [x] Modular la pregeneración del tablero.
 
 ## LOW PRIORITY:
-- [ ] Dificultades (fácil, medio, difícil).
-- [ ] Algoritmo para localizar las mejores posiciones.
+- [x] Dificultades (fácil, medio, difícil).
+- [x] Algoritmo para localizar las mejores posiciones.
 
 
 # JOSE ANTONIO
