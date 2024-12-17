@@ -21,7 +21,7 @@ public class Tres_En_Raya {
 
         do {
             char[][] board = generateBoard();
-            System.out.println("\nNueva partida: \n");
+            System.out.println("Nueva partida: \n");
             printBoard(board);
 
             String difficulty = chooseDifficulty(sc);
@@ -161,24 +161,14 @@ public class Tres_En_Raya {
             if (validMovement(board, i)) {
                 updateBoard(i, computer, board);
                 if (checkWinner(board, computer)) {
-                    undoMove(i, board);
-                    return i;
-                }
-                undoMove(i, board);
-            }
-        }
-
-        // Bloquea al jugador si está a punto de ganar
-        for (int i = 1; i <= 9; i++) {
-            if (validMovement(board, i)) {
-                updateBoard(i, user, board);
-                if (checkWinner(board, user)) {
                     undoMovement(i, board);
                     return i;
                 }
                 undoMovement(i, board);
             }
         }
+        // Bloquea al jugador si está a punto de ganar
+        getBlockingMove(board, computer, user);
 
         // Si no hay ningún movimiento ganador, elige uno al azar
         return getRandomMove(board);
